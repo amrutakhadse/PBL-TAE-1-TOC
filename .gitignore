@@ -6,6 +6,9 @@ commandlinetools.zip
 dfa_desktop_app/
 dfa_validator/
 
+# Large desktop app (234MB exe - exceeds GitHub 100MB limit)
+DFA_Validator_App/
+
 # Large binary files
 *.zip
 
