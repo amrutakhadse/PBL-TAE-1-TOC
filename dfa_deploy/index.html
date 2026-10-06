@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="dfa_validator">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>dfa_validator</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Install App Button Styles */
+    #install-btn {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #6C63FF, #4A90E2);
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.3s ease;
+      user-select: none;
+    }
+
+    #install-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.55);
+    }
+
+    #install-btn:active {
+      transform: translateY(0px);
+      box-shadow: 0 3px 10px rgba(108, 99, 255, 0.4);
+    }
+
+    #install-btn.visible {
+      display: block;
+      animation: fadeInDown 0.4s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- PWA Install Button -->
+  <button id="install-btn" title="Install DFA Validator as a desktop/mobile app">
+    ⬇ Install App
+  </button>
+
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
+
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    (function () {
+      var installBtn = document.getElementById('install-btn');
+      var deferredPrompt = null;
+
+      // 1. Capture the install prompt event
+      window.addEventListener('beforeinstallprompt', function (e) {
+        // Prevent Chrome from showing the mini-infobar automatically
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Show our custom button
+        installBtn.classList.add('visible');
+        console.log('[PWA] beforeinstallprompt captured – Install button shown.');
+      });
+
+      // 2. When button clicked, show the native install dialog
+      installBtn.addEventListener('click', async function () {
+        if (!deferredPrompt) {
+          console.warn('[PWA] No install prompt available.');
+          return;
+        }
+
+        // Show the prompt
+        deferredPrompt.prompt();
+
+        // Wait for the user's choice
+        var choiceResult = await deferredPrompt.userChoice;
+        console.log('[PWA] User choice:', choiceResult.outcome);
+
+        // Reset – prompt can only be used once
+        deferredPrompt = null;
+
+        // Hide button after interaction
+        installBtn.classList.remove('visible');
+      });
+
+      // 3. If app was already installed, hide the button
+      window.addEventListener('appinstalled', function () {
+        console.log('[PWA] App installed successfully!');
+        installBtn.classList.remove('visible');
+        deferredPrompt = null;
+      });
+    })();
+  </script>
+</body>
+</html>

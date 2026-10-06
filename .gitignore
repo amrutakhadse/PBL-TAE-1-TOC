@@ -1,0 +1,18 @@
+# Flutter/Dart
+flutter/
+flutter.zip
+android-cmdline.zip
+commandlinetools.zip
+dfa_desktop_app/
+dfa_validator/
+
+# Large binary files
+*.zip
+
+# Temp/scripts
+*.bat
+*.vbs
+*.lnk
+
+# Build artifacts not needed
+dfa_deploy/.last_build_id
